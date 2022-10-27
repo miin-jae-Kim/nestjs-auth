@@ -1,5 +1,6 @@
 import { ForbiddenException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import * as bcrypt from "bcrypt";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/create.user.dto";
 import { User } from "./entity/user.entity";
@@ -24,6 +25,8 @@ export class UserService {
                 error: "Forbidden"
             })
         }
+
+        user.password = await bcrypt.hash(user.password, process.env.PASSWORD_BCRYPT);
 
         const { password, ...createdUserInfo } = await this.userRepository.save(user);
         return createdUserInfo;
