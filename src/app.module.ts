@@ -12,7 +12,7 @@ import { UserModule } from './user/user.module';
       port: 3306,
       username: "root",
       database: "test",
-      entities: [],
+      entities: ["dist/**/*.entity{.ts,.js}"],
       synchronize: true
     }),
     UserModule
