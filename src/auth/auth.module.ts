@@ -6,6 +6,7 @@ import { User } from 'src/user/entity/user.entity';
 import { UserModule } from 'src/user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { JwtStrategy } from './guard/jwt/jwt.strategy';
 import { LocalStrategy } from './guard/local/local.strategy';
 
 @Module({
@@ -13,7 +14,7 @@ import { LocalStrategy } from './guard/local/local.strategy';
     UserModule,
     PassportModule,
     JwtModule.register({
-      secretOrPrivateKey: "bapbodanbbang",
+      secret: "bapbodanbbang",
       signOptions: {
         expiresIn: "60s"
       }
@@ -21,6 +22,6 @@ import { LocalStrategy } from './guard/local/local.strategy';
     TypeOrmModule.forFeature([User])
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy]
+  providers: [AuthService, LocalStrategy, JwtStrategy]
 })
 export class AuthModule {}

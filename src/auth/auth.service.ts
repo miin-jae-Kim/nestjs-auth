@@ -29,16 +29,14 @@ export class AuthService {
             })
           }
 
-        return {
-            id: user.id,
-            name: user.name
-        };
+        const { password, ...userData } = user;
+        return userData;
     }
 
     async login(user:any) {
         const accessToken = this.jwtService.sign({
             username: user.name,
-            sub: user.id
+            id: user.id
         });
 
         return { accessToken };
