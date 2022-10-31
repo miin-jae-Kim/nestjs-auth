@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filter/httpException.filter';
 import * as winston from 'winston';
 import { HttpLoggingInterceptor } from './intercepter/httpLogging.intercepter';
+import { HttpResponseInterceptor } from './intercepter/httpResponse.intercepter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -37,7 +38,11 @@ async function bootstrap() {
   }));
 
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new HttpLoggingInterceptor(Logger));
+
+  app.useGlobalInterceptors(
+    new HttpResponseInterceptor(),
+    new HttpLoggingInterceptor(Logger)
+  );
 
   await app.listen(3000);
 }
