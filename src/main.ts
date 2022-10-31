@@ -1,10 +1,40 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { WinstonModule, utilities as nestWinstonModuleUtilities } from 'nest-winston';
+import * as winston from 'winston';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filter/httpException.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+
+
+    /*
+      One solution is to create the logger outside of the application lifecycle, 
+      using the createLogger function, and pass it to NestFactory.create. 
+      Nest will then wrap our winston logger (the same instance returned by the createLogger method) 
+      into the Logger class, forwarding all calls to it
+    */
+
+
+    logger: 
+      WinstonModule.createLogger({
+        // options (same as WinstonModule.forRoot() options)
+        transports: [
+          new winston.transports.File({ filename: 'logFile/error.log', level: 'error' }),
+          new winston.transports.File({ 
+            format: winston.format.combine(
+              winston.format.timestamp(),
+              winston.format.ms(),
+              nestWinstonModuleUtilities.format.nestLike('NestJS Tutorial', {
+                // options
+              }),
+            ),
+            filename: 'logFile/combined.log',
+          }),
+        ],
+      })
+  });
 
 
   /*
