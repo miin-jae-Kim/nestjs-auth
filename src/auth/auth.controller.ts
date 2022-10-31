@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Logger, LoggerService, Post, Req, UseGuards } from '@nestjs/common';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { LoginUserDto } from 'src/user/dto/login.user.dto';
 import { AuthService } from './auth.service';
 import { JwtGuard } from './guard/jwt/jwt.auth.guard';
