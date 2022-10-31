@@ -15,7 +15,7 @@ async function bootstrap() {
           level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
           format: winston.format.combine(
                     winston.format.timestamp(),
-                    nestWinstonModuleUtilities.format.nestLike('NestJS', { prettyPrint: true }),
+                    nestWinstonModuleUtilities.format.nestLike('NestJS', { prettyPrint: true, colors: true }),
                   ),
         }),
       ]
