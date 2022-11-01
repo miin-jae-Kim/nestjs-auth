@@ -26,7 +26,7 @@ export class UserService {
             })
         }
 
-        user.password = await bcrypt.hash(user.password, process.env.PASSWORD_BCRYPT);
+        user.password = await bcrypt.hash(user.password, parseInt(process.env.PASSWORD_BCRYPT));
 
         const { password, ...createdUserInfo } = await this.userRepository.save(user);
         return createdUserInfo;
