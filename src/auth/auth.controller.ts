@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtGuard } from './guard/jwt/jwt.auth.guard';
 import { LocalAuthGuard } from './guard/local/local.auth.guard';
@@ -18,4 +18,21 @@ export class AuthController {
     async profile(@Req() req) {
         return req.user;
     }
+
+    @Post('authCode')
+    async generateAuthCode(@Body() reqeustBody) {
+        const authCode = this.authService.generateAuthCode(reqeustBody.email);
+        return authCode;
+    }
+
+    @Post('authCode/validate')
+    async validateAuthCode(@Body() requestBody) {
+        const isValidated = this.authService.validateAuthCode(
+            requestBody.email, 
+            requestBody.authCode
+        )
+
+        return isValidated;
+    }
+
 }

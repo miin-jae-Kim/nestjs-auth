@@ -1,6 +1,7 @@
-import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, ForbiddenException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cache } from 'cache-manager';
 import { LoginAuthDto } from 'src/auth/dto/login.auth.dto';
 import { User } from 'src/user/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -10,6 +11,8 @@ export class AuthService {
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
+        @Inject(CACHE_MANAGER)
+        private cacheManager: Cache,
         private jwtService: JwtService
     ){}
 
@@ -40,5 +43,16 @@ export class AuthService {
         });
 
         return { accessToken };
+    }
+
+    async generateAuthCode(email:string):Promise<number> {
+        const authCode = Math.floor(Math.random() * (10 ** 6));
+        const result = await this.cacheManager.set(`SIGN_UP_${email}`, authCode, 10000);
+        return authCode;
+    }
+
+    async validateAuthCode(email:string, authCode:number):Promise<boolean> {
+        const savedAuthCode = await this.cacheManager.get(`SIGN_UP_${email}`);
+        return savedAuthCode == authCode;
     }
 }

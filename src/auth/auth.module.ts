@@ -22,6 +22,10 @@ import { LocalStrategy } from './guard/local/local.strategy';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy]
+  providers: [
+    AuthService,
+    LocalStrategy, 
+    JwtStrategy
+  ]
 })
 export class AuthModule {}
