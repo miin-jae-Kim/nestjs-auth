@@ -1,7 +1,7 @@
 import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LoginUserDto } from 'src/user/dto/login.user.dto';
+import { LoginAuthDto } from 'src/auth/dto/login.auth.dto';
 import { User } from 'src/user/entity/user.entity';
 import { Repository } from 'typeorm';
 
@@ -13,11 +13,11 @@ export class AuthService {
         private jwtService: JwtService
     ){}
 
-    async validateUser(userInfo:LoginUserDto):Promise<any> {
+    async validateUser(loginAuthInfo:LoginAuthDto):Promise<any> {
         const user = await this.userRepository.findOne({
             where: {
-                email: userInfo.email,
-                password: userInfo.password
+                email: loginAuthInfo.email,
+                password: loginAuthInfo.password
             }
         });
 
